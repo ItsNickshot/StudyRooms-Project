@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Εγγραφή</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4>Εγγραφή Νέου Χρήστη</h4>
+                </div>
+                <div class="card-body">
+
+                    <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">
+                        Error Message
+                    </div>
+
+                    <form th:action="@{/register}" th:object="${form}" method="post">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName" class="form-label">Όνομα</label>
+                                <input type="text" class="form-control" id="firstName" th:field="*{firstName}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Error</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName" class="form-label">Επώνυμο</label>
+                                <input type="text" class="form-control" id="lastName" th:field="*{lastName}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Error</div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Όνομα Χρήστη (Username)</label>
+                            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Κωδικός Πρόσβασης</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Εγγραφή</button>
+                        </div>
+                    </form>
+
+                    <div class="mt-3 text-center">
+                        <p>Έχετε ήδη λογαριασμό; <a th:href="@{/login}">Σύνδεση</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

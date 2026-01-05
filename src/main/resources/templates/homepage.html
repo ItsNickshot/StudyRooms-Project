@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{base}">
+<head>
+    <title>Αρχική</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="p-5 mb-4 bg-light rounded-3 text-center shadow-sm">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold text-primary">Καλώς ήρθατε στο StudyRooms</h1>
+            <p class="col-md-8 fs-4 mx-auto text-muted">
+                Το σύστημα διαχείρισης χώρων μελέτης της Βιβλιοθήκης.
+            </p>
+
+            <div sec:authorize="!isAuthenticated()" class="mt-4">
+                <a th:href="@{/login}" class="btn btn-primary btn-lg px-4 gap-3">Σύνδεση</a>
+                <a th:href="@{/register}" class="btn btn-outline-secondary btn-lg px-4">Εγγραφή</a>
+            </div>
+
+            <div sec:authorize="isAuthenticated()" class="mt-4">
+                <p class="lead">Γεια σου, <span sec:authentication="name">User</span>!</p>
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a sec:authorize="hasRole('STUDENT')" th:href="@{/bookings/new}" class="btn btn-success btn-lg px-4 gap-3">
+                        <i class="bi bi-plus-circle"></i> Κάνε Νέα Κράτηση
+                    </a>
+                    <a th:href="@{/bookings}" class="btn btn-primary btn-lg px-4">
+                        <i class="bi bi-list-check"></i> Οι Κρατήσεις μου
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-md-stretch">
+        <div class="col-md-6">
+            <div class="h-100 p-5 text-white bg-dark rounded-3">
+                <h2>Ωράριο Λειτουργίας</h2>
+                <p>Δευτέρα - Παρασκευή: 08:00 - 20:00</p>
+                <p>Σαββατοκύριακο: Κλειστά</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="h-100 p-5 bg-white border rounded-3 shadow-sm">
+                <h2>Οδηγίες Χρήσης</h2>
+                <ul class="list-unstyled">
+                    <li>✅ Συνδεθείτε με τον ιδρυματικό λογαριασμό σας.</li>
+                    <li>✅ Επιλέξτε "Νέα Κράτηση" για να δείτε διαθεσιμότητα.</li>
+                    <li>✅ Τηρείτε το χρόνο κράτησης και την ησυχία.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

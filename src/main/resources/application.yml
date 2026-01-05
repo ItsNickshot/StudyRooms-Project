@@ -1,0 +1,47 @@
+# application.yml (or application-dev.yml if you use profiles)
+spring:
+  application:
+    name: Office Hours
+
+  # postgresql://officehoursusr:yuI82UCUr6688z7NLsQGhMn0hKwDNC5w@dpg-d4snvpshg0os738apvd0-a.frankfurt-postgres.render.com/officehoursdb_ugwi
+  datasource:
+    url: jdbc:postgresql://dpg-d4snvpshg0os738apvd0-a.frankfurt-postgres.render.com:5432/officehoursdb_ugwi
+    username: officehoursusr
+    password: yuI82UCUr6688z7NLsQGhMn0hKwDNC5w
+    driver-class-name: org.postgresql.Driver
+#  datasource:
+#    url: jdbc:h2:file:./LOCAL_DATA/h2/app;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+#    username: sa
+#    password: changeme
+#    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop   # dev only
+    open-in-view: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+#      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.format_sql: true
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+    include-message: always
+    include-binding-errors: always
+    include-exception: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+# Custom Application Properties.
+app:
+  jwt:
+    issuer: "office-hours-api"
+    audience: "external-systems"
+    secret: "${JWT_SECRET:Uh0WvRj5qs2sChP0dwTkky/VoudWSk0FVikEDDUKdRU=}" # openssl rand -base64 32
+    ttl-minutes: 60

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Το Προφίλ μου</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="bi bi-person-badge"></i> Το Προφίλ μου</h3>
+            </div>
+            <div class="card-body" th:if="${currentUser != null}">
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Όνομα Χρήστη:</div>
+                    <div class="col-sm-9" th:text="${currentUser.username}">user123</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Ονοματεπώνυμο:</div>
+                    <div class="col-sm-9" th:text="${currentUser.person.firstName + ' ' + currentUser.person.lastName}">Giannis Papadopoulos</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Email:</div>
+                    <div class="col-sm-9" th:text="${currentUser.person.email}">it21000@hua.gr</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-3 fw-bold">Ρόλος:</div>
+                    <div class="col-sm-9">
+                        <span class="badge bg-info text-dark" th:text="${currentUser.person.type}">STUDENT</span>
+                    </div>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-end">
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-box-arrow-right"></i> Αποσύνδεση
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body" th:if="${currentUser == null}">
+                <div class="alert alert-warning">
+                    Δεν βρέθηκαν πληροφορίες χρήστη. Παρακαλώ συνδεθείτε ξανά.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

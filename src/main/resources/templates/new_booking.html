@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}">
+<head>
+    <title>Νέα Κράτηση</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Κράτηση Αίθουσας</h4>
+                    </div>
+                    <div class="card-body">
+
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">
+                            Σφάλμα κράτησης
+                        </div>
+
+                        <form th:action="@{/bookings/new}" th:object="${form}" method="post">
+
+                            <div class="mb-3">
+                                <label for="room" class="form-label">Επιλογή Αίθουσας</label>
+                                <select class="form-select" id="room" th:field="*{roomId}" required>
+                                    <option value="" disabled selected>Διάλεξε δωμάτιο...</option>
+                                    <option th:each="room : ${rooms}"
+                                            th:value="${room.id}"
+                                            th:text="${room.name + ' (Χωρητικότητα: ' + room.capacity + ')'}">
+                                        Αίθουσα 1
+                                    </option>
+                                </select>
+                                <div class="text-danger" th:if="${#fields.hasErrors('roomId')}" th:errors="*{roomId}">Error</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="startTime" class="form-label">Ώρα Έναρξης</label>
+                                <input type="datetime-local" class="form-control" id="startTime" th:field="*{startTime}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('startTime')}" th:errors="*{startTime}">Error</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="endTime" class="form-label">Ώρα Λήξης</label>
+                                <input type="datetime-local" class="form-control" id="endTime" th:field="*{endTime}" required>
+                                <div class="text-danger" th:if="${#fields.hasErrors('endTime')}" th:errors="*{endTime}">Error</div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">Ολοκλήρωση Κράτησης</button>
+                                <a th:href="@{/bookings}" class="btn btn-secondary">Ακύρωση</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
