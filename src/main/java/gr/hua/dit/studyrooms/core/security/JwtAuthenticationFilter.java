@@ -9,16 +9,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * JWT authentication filter.
@@ -29,10 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtService jwtService;
+    private final UserDetailsService userDetailsService; // Προσθήκη του Service για φόρτωση χρήστη
 
-    public JwtAuthenticationFilter(final JwtService jwtService) {
+    // Ενημέρωση του Constructor
+    public JwtAuthenticationFilter(final JwtService jwtService,
+                                   final UserDetailsService userDetailsService) {
         if (jwtService == null) throw new NullPointerException();
         this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
     }
 
     private void writeError(final HttpServletResponse response) throws IOException {
@@ -44,18 +45,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         final String path = request.getServletPath();
-        if (path.equals("/api/v1/auth/client-tokens")) return true;
-        return !path.startsWith("/api/v1");
+        if (path.equals("/api/auth/token")) return true;
+        return !path.startsWith("/api");
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain) throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
 
-        // No header or not Bearer? -> Let the request continue unauthenticated.
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -65,27 +64,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final Claims claims = this.jwtService.parse(token);
             final String subject = claims.getSubject();
-            final Collection<String> roles = (Collection<String>) claims.get("roles");
 
-            // Convert String to GrantedAuthority
-            final var authorities =
-                roles == null
-                    ? List.<GrantedAuthority>of() // empty list
-                    : roles.stream().map(role ->
-                        new SimpleGrantedAuthority("ROLE_" + role)).toList();
+            // ΣΗΜΑΝΤΙΚΗ ΑΛΛΑΓΗ: Φορτώνουμε τον χρήστη από τη βάση
+            // Έτσι το Principal θα είναι τύπου ApplicationUserDetails και όχι απλό User
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(subject);
 
-            // Create User.
-            final User principal = new User(subject, "", authorities);
             final UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(principal, null, authorities);
+                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         } catch (Exception ex) {
-            // Invalid Token or Internal error.
             LOGGER.warn("JwtAuthenticationFilter failed", ex);
             this.writeError(response);
-            return; // stop here, i.e, next filters are ignored.
+            return;
         }
 
-        filterChain.doFilter(request, response); // next filter.
+        filterChain.doFilter(request, response);
     }
 }

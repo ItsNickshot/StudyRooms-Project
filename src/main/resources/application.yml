@@ -3,17 +3,12 @@ spring:
   application:
     name: Office Hours
 
-  # postgresql://officehoursusr:yuI82UCUr6688z7NLsQGhMn0hKwDNC5w@dpg-d4snvpshg0os738apvd0-a.frankfurt-postgres.render.com/officehoursdb_ugwi
+
   datasource:
-    url: jdbc:postgresql://dpg-d4snvpshg0os738apvd0-a.frankfurt-postgres.render.com:5432/officehoursdb_ugwi
-    username: officehoursusr
-    password: yuI82UCUr6688z7NLsQGhMn0hKwDNC5w
-    driver-class-name: org.postgresql.Driver
-#  datasource:
-#    url: jdbc:h2:file:./LOCAL_DATA/h2/app;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
-#    username: sa
-#    password: changeme
-#    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:./LOCAL_DATA/h2/app;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password: changeme
+    driver-class-name: org.h2.Driver
 
   jpa:
     hibernate:
