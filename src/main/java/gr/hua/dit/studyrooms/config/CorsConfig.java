@@ -18,7 +18,7 @@ public class CorsConfig {
             @SuppressWarnings("NullableProblems")
             @Override
             public void addCorsMappings(final CorsRegistry registry) {
-                registry.addMapping("/api/v1/**")
+                registry.addMapping("/api/**")
                     .allowedOrigins("http://localhost")
                     .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                     .allowedHeaders("*")
