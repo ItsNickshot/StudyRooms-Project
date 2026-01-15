@@ -35,7 +35,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
             .group("api")
             .packagesToScan("gr.hua.dit.studyrooms.web.rest")
-            .pathsToMatch("/api/**") // ΑΛΛΑΓΗ ΕΔΩ: Πιάνει τα πάντα κάτω από το /api
+            .pathsToMatch("/api/**") 
             .build();
     }
 }
