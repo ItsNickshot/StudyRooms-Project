@@ -93,6 +93,12 @@ public class BookingService {
             .collect(Collectors.toList());
     }
 
+    public List<BookingView> getAllBookings() {
+        return bookingRepository.findAll().stream()
+            .map(bookingMapper::toView)
+            .collect(Collectors.toList());
+    }
+
     /**
      * Επιστρέφει όλα τα διαθέσιμα δωμάτια.
      */

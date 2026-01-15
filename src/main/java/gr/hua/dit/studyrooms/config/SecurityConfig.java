@@ -2,6 +2,10 @@ package gr.hua.dit.studyrooms.config;
 
 import gr.hua.dit.studyrooms.core.security.ApplicationUserDetailsService;
 import gr.hua.dit.studyrooms.core.security.JwtAuthenticationFilter;
+import gr.hua.dit.studyrooms.web.rest.error.RestApiAccessDeniedHandler;
+
+import gr.hua.dit.studyrooms.web.rest.error.RestApiAuthenticationEntryPoint;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -27,14 +31,20 @@ public class SecurityConfig {
     private final ApplicationUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final CorsConfigurationSource corsConfigurationSource;
+    private final RestApiAccessDeniedHandler restApiAccessDeniedHandler;
+    private final RestApiAuthenticationEntryPoint restApiAuthenticationEntryPoint;
 
     public SecurityConfig(
         ApplicationUserDetailsService userDetailsService,
         JwtAuthenticationFilter jwtAuthFilter,
-        CorsConfigurationSource corsConfigurationSource) {
+        CorsConfigurationSource corsConfigurationSource,
+        RestApiAccessDeniedHandler restApiAccessDeniedHandler,
+        RestApiAuthenticationEntryPoint restApiAuthenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
         this.corsConfigurationSource = corsConfigurationSource;
+        this.restApiAccessDeniedHandler = restApiAccessDeniedHandler;
+        this.restApiAuthenticationEntryPoint = restApiAuthenticationEntryPoint;
     }
 
     // 1. Ρύθμιση για το API (JWT)
@@ -48,6 +58,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .accessDeniedHandler(restApiAccessDeniedHandler)
+                .authenticationEntryPoint(restApiAuthenticationEntryPoint)
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authenticationProvider(authenticationProvider())

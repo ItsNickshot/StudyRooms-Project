@@ -26,26 +26,43 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">Αρχική</a>
                 </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+
+                <li class="nav-item" sec:authorize="hasRole('STUDENT')">
                     <a class="nav-link" th:href="@{/bookings}">Οι Κρατήσεις μου</a>
                 </li>
+
                 <li class="nav-item" sec:authorize="hasRole('STUDENT')">
                     <a class="nav-link" th:href="@{/bookings/new}">Νέα Κράτηση</a>
                 </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link text-warning" th:href="@{/bookings/all}">
+                        <i class="bi bi-shield-lock"></i> Διαχείριση Κρατήσεων
+                    </a>
+                </li>
+
             </ul>
 
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/login}">Σύνδεση</a>
                 </li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a class="nav-link" th:href="@{/register}">Εγγραφή</a>
+                </li>
+
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-person-circle"></i> <span sec:authentication="name">User</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
+                            <a class="dropdown-item" th:href="@{/profile}">Το Προφίλ μου</a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
                             <form th:action="@{/logout}" method="post">
-                                <button type="submit" class="dropdown-item">Αποσύνδεση</button>
+                                <button type="submit" class="dropdown-item text-danger">Αποσύνδεση</button>
                             </form>
                         </li>
                     </ul>

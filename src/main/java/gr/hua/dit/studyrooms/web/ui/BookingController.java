@@ -40,6 +40,19 @@ public class BookingController {
         return "new_booking"; // Θα φτιάξουμε το new_booking.html μετά
     }
 
+    // --- ΠΡΟΣΘΗΚΗ ΓΙΑ ADMIN ---
+
+    // Αυτό το URL θα είναι: localhost:8080/bookings/all
+    @GetMapping("/all")
+    @Secured("ROLE_ADMIN") // Μόνο ο Admin μπορεί να το δει
+    public String listAllBookingsForAdmin(Model model) {
+        // Εδώ καλούμε τη μέθοδο που φέρνει ΤΑ ΠΑΝΤΑ (όχι μόνο τα δικά του)
+        model.addAttribute("bookings", bookingService.getAllBookings());
+
+        // Μπορούμε να χρησιμοποιήσουμε το ίδιο HTML αρχείο (bookings.html)
+        return "bookings";
+    }
+
     // Υποβολή της φόρμας
     @PostMapping("/new")
     @Secured("ROLE_STUDENT")

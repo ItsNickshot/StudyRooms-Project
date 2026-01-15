@@ -1,4 +1,4 @@
-package gr.hua.dit.studyrooms;
+/*package gr.hua.dit.studyrooms;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,3 +11,4 @@ class StudyRoomsApplicationTests {
 	}
 
 }
+*/

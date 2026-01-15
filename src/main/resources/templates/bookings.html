@@ -2,14 +2,15 @@
 <html lang="el"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{base}">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{base}">
 <head>
     <title>Οι Κρατήσεις μου</title>
 </head>
 <body>
 <div layout:fragment="page_content">
     <div class="container mt-4">
-        <h2>Οι Κρατήσεις μου</h2>
+        <h2 sec:authorize="hasRole('ADMIN')">Διαχείριση Κρατήσεων</h2>
+        <h2 sec:authorize="!hasRole('ADMIN')">Οι Κρατήσεις μου</h2>
 
         <div class="mb-3" sec:authorize="hasRole('STUDENT')">
             <a th:href="@{/bookings/new}" class="btn btn-primary">

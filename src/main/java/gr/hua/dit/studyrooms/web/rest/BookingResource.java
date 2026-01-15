@@ -35,4 +35,12 @@ public class BookingResource {
         BookingView view = bookingService.createBooking(request);
         return ResponseEntity.created(URI.create("/api/bookings/" + view.id())).body(view);
     }
+    // --- ΠΡΟΣΘΗΚΗ ΓΙΑ ADMIN (API) ---
+
+    // GET /api/bookings/all
+    @GetMapping("/all")
+    @Secured("ROLE_ADMIN")
+    public ResponseEntity<List<BookingView>> getAllBookings() {
+        return ResponseEntity.ok(bookingService.getAllBookings());
+    }
 }
