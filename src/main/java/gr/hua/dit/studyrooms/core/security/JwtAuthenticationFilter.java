@@ -65,7 +65,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final Claims claims = this.jwtService.parse(token);
             final String subject = claims.getSubject();
 
-            // ΣΗΜΑΝΤΙΚΗ ΑΛΛΑΓΗ: Φορτώνουμε τον χρήστη από τη βάση
             // Έτσι το Principal θα είναι τύπου ApplicationUserDetails και όχι απλό User
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(subject);
 
