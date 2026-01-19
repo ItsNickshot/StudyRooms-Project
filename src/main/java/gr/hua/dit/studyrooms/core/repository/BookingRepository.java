@@ -22,23 +22,22 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     /*
      * QUERY ΓΙΑ ΕΛΕΓΧΟ ΕΠΙΚΑΛΥΨΗΣ (OVERLAPPING)
      * Ελέγχει αν υπάρχει ήδη κράτηση (b) στο ίδιο δωμάτιο (:roomId)
-     * η οποία ΔΕΝ έχει ακυρωθεί (status != CANCELLED)
+     * η οποία είναι ΕΝΕΡΓΗ (CONFIRMED ή PENDING)
      * και οι χρόνοι συμπίπτουν.
-     * * Λογική επικάλυψης: (StartA < EndB) και (EndA > StartB)
+     * Λογική επικάλυψης: (StartA < EndB) και (EndA > StartB)
      */
     @Query("SELECT COUNT(b) > 0 FROM Booking b " +
         "WHERE b.room.id = :roomId " +
-        "AND b.status != 'CANCELLED' " +
-        "AND b.status != 'REJECTED' " +
+        "AND (b.status = 'CONFIRMED' OR b.status = 'PENDING') " +
         "AND (b.startTime < :endTime AND b.endTime > :startTime)")
     boolean existsOverlappingBooking(@Param("roomId") Long roomId,
                                      @Param("startTime") LocalDateTime startTime,
                                      @Param("endTime") LocalDateTime endTime);
 
     // Για τον κανόνα: "Ο φοιτητής μπορεί να έχει μέχρι Χ ενεργές κρατήσεις"
-    // Μετράμε πόσες κρατήσεις έχει που ΔΕΝ είναι ακυρωμένες ή απορριπτέες
+    // Μετράμε πόσες κρατήσεις έχει που είναι CONFIRMED ή PENDING
     @Query("SELECT COUNT(b) FROM Booking b " +
         "WHERE b.student.id = :studentId " +
-        "AND b.status IN ('PENDING', 'CONFIRMED')")
+        "AND (b.status = 'CONFIRMED' OR b.status = 'PENDING')")
     long countActiveBookings(@Param("studentId") Long studentId);
 }
