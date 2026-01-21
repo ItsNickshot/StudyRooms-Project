@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{base}">
+<head>
+    <title>Νέα Αίθουσα</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="bi bi-building-add"></i> Προσθήκη Αίθουσας</h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/rooms/new}" method="post">
+
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Όνομα Αίθουσας</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="π.χ. Αίθουσα Java" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="capacity" class="form-label">Χωρητικότητα (άτομα)</label>
+                            <input type="number" class="form-control" id="capacity" name="capacity" value="4" min="1" required>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Δημιουργία</button>
+                            <a th:href="@{/}" class="btn btn-secondary">Ακύρωση</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

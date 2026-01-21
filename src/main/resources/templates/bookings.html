@@ -9,8 +9,8 @@
 <body>
 <div layout:fragment="page_content">
     <div class="container mt-4">
-        <h2 sec:authorize="hasRole('ADMIN')">Διαχείριση Κρατήσεων</h2>
-        <h2 sec:authorize="!hasRole('ADMIN')">Οι Κρατήσεις μου</h2>
+        <h2 sec:authorize="hasAnyRole('ADMIN', 'STAFF')">Διαχείριση Κρατήσεων</h2>
+        <h2 sec:authorize="!hasAnyRole('ADMIN', 'STAFF')">Οι Κρατήσεις μου</h2>
 
         <div class="mb-3" sec:authorize="hasRole('STUDENT')">
             <a th:href="@{/bookings/new}" class="btn btn-primary">
@@ -22,10 +22,11 @@
             <thead class="table-dark">
             <tr>
                 <th>Αίθουσα</th>
-                <th>Φοιτητής</th> <th>Από</th>
+                <th>Φοιτητής</th>
+                <th>Από</th>
                 <th>Έως</th>
                 <th>Κατάσταση</th>
-            </tr>
+                <th>Ενέργειες</th> </tr>
             </thead>
             <tbody>
             <tr th:each="booking : ${bookings}">
@@ -37,6 +38,15 @@
                     <span class="badge"
                           th:classappend="${booking.status == 'CONFIRMED' ? 'bg-success' : (booking.status == 'CANCELLED' ? 'bg-danger' : 'bg-warning')}"
                           th:text="${booking.status}">CONFIRMED</span>
+                </td>
+                <td>
+                    <form th:if="${booking.status != 'CANCELLED'}"
+                          th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
+                        <button type="submit" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Είστε σίγουροι ότι θέλετε να ακυρώσετε αυτή την κράτηση;');">
+                            <i class="bi bi-x-circle"></i> Ακύρωση
+                        </button>
+                    </form>
                 </td>
             </tr>
             </tbody>

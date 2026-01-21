@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="el"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{base}">
+<head>
+    <title>Διαχείριση Αιθουσών</title>
+</head>
+<body>
+<div layout:fragment="page_content">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Διαχείριση Αιθουσών</h2>
+            <a th:href="@{/rooms/new}" class="btn btn-success">
+                <i class="bi bi-plus-lg"></i> Νέα Αίθουσα
+            </a>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger">
+            Η αίθουσα δεν μπορεί να διαγραφεί γιατί υπάρχουν συνδεδεμένες κρατήσεις!
+        </div>
+
+        <table class="table table-bordered table-hover shadow-sm">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Όνομα</th>
+                <th>Χωρητικότητα</th>
+                <th>Κατάσταση</th>
+                <th>Ενέργειες</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.id}">1</td>
+
+                <td th:text="${room.name}">Java Lab</td>
+
+                <td th:text="${room.capacity}">4</td>
+
+                <td>
+                    <span class="badge bg-success" th:if="${room.active}">Ενεργή</span>
+                    <span class="badge bg-secondary" th:unless="${room.active}">Ανενεργή</span>
+                </td>
+
+                <td>
+                    <div class="btn-group" role="group">
+                        <a th:href="@{/rooms/{id}/edit(id=${room.id})}" class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i> Επεξεργασία
+                        </a>
+
+                        <form th:action="@{/rooms/{id}/delete(id=${room.id})}" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger ms-1"
+                                    onclick="return confirm('Είστε σίγουροι ότι θέλετε να διαγράψετε την αίθουσα;');">
+                                <i class="bi bi-trash"></i> Διαγραφή
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

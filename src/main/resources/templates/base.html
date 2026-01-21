@@ -35,9 +35,15 @@
                     <a class="nav-link" th:href="@{/bookings/new}">Νέα Κράτηση</a>
                 </li>
 
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN', 'STAFF')">
                     <a class="nav-link text-warning" th:href="@{/bookings/all}">
                         <i class="bi bi-shield-lock"></i> Διαχείριση Κρατήσεων
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link text-info" th:href="@{/rooms}">
+                        <i class="bi bi-building-gear"></i> Διαχείριση Αιθουσών
                     </a>
                 </li>
 
